@@ -39,6 +39,7 @@ async function syncDB() {
         await sequelize.sync({ force: true });
         console.log('Database connected');
         Todo.create({ value : "tache 1", status: true})
+        Todo.create({ value : "tache 2", status: false})
     } catch (error) {
         console.error('error synching database', error);
     }
