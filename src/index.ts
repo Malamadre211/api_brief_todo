@@ -29,6 +29,9 @@ async function syncDB() {
 }
 syncDB();
 
+app.get('/', (_req, res) => {
+	return res.send('Express Typescript on Vercel')
+})
 
   app.post('/add/:valeur', (req, res) => {
     const todo = req.params.valeur

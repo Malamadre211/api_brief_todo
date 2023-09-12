@@ -11,3 +11,6 @@ GET http://localhost:3030/remove-all/
 
 ###
 GET http://localhost:3030/get-all/
+
+###
+GET http://localhost:3030/
