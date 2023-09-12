@@ -54,22 +54,20 @@ syncDB();
     console.log('create')
   })
 
+  app.get('/update', async (req, res) => {
+    const todos = await Todo.create ({value : "tache 1", status: true});
+      await todos.update({value : "update", status: false});
+      await todos.save();
+      res.send(todos)
+      console.log("update")
+    })
+
   app.get('/remove/:valeur', (req, res) => {
     const todo = req.params.valeur
     Todo.destroy({where: {value : todo}})
     res.send(`${todo}`)
     console.log('remove')
   })  
-
-  app.get('/remove-all', async (req, res) => {
-    const todos = await Todo.findAll()
-    for (let index = 0; index < todos.length; index++) {
-      const element = todos[index];
-      await element.destroy()
-    }
-    res.send('ok')
-    console.log('remove all')
-  })
 
   app.get('/get-all', async (req, res) => {
     const todos = await Todo.findAll()
@@ -79,14 +77,15 @@ syncDB();
     console.log(todos)
   })
 
-  app.get('/update', async (req, res) => {
-    const todos = await Todo.create ({value : "tache 1", status: true});
-      await todos.update({value : "update", status: false});
-      await todos.save();
-      res.send(todos)
-      console.log("update")
-    })
-
+  app.get('/remove-all', async (req, res) => {
+    const todos = await Todo.findAll()
+    for (let index = 0; index < todos.length; index++) {
+    const element = todos[index];
+    await element.destroy()
+    }
+    res.send('ok')
+    console.log('remove all')
+  })
 
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
