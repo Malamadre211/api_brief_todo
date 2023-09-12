@@ -1,28 +1,11 @@
 import express from "express"
 import dotenv from "dotenv"
 import { log } from "console";
+import { Sequelize, DataTypes } from 'sequelize';
+dotenv.config();
 
 const app = express();
-dotenv.config();
 const port = process.env.PORT as string
-const database = process.env.database as string
-const username = process.env.username as string
-const password = process.env.password as string
-
-console.log({database, username, password})
- 
-import { Sequelize, DataTypes } from 'sequelize';
-
-// const sequelize = new Sequelize(database,username,password, {
-//     host: 'localhost',
-//     dialect: 'postgres'
-// });
-// const sequelize = new Sequelize(`postgres://${username}:${password}@localhost:5432/${database}`)
-// const sequelize = new Sequelize(database, 'postgres', password, {
-//     host: 'localhost',
-//     dialect: 'postgres',
-//     port:5432,
-// } );
 
 const sequelize = new Sequelize({
     dialect: "sqlite",
@@ -47,16 +30,17 @@ async function syncDB() {
 syncDB();
 
 
-  app.post('/task/:valeur', (req, res) => {
+  app.post('/add/:valeur', (req, res) => {
     const todo = req.params.valeur
     Todo.create({value: `${todo}`, status:true})
     res.send(todo)
     console.log('create')
   })
 
-  app.get('/update', async (req, res) => {
-    const todos = await Todo.create ({value : "tache 1", status: true});
-      await todos.update({value : "update", status: false});
+  app.get('/update/:valeur', async (req, res) => {
+    let update = req.params.valeur
+    const todos = await Todo.create ({value : update, status: true});
+      await todos.update({value : "tache update", status: false});
       await todos.save();
       res.send(todos)
       console.log("update")
@@ -69,7 +53,7 @@ syncDB();
     console.log('remove')
   })  
 
-  app.get('/get-all', async (req, res) => {
+  app.get('/get-all/', async (req, res) => {
     const todos = await Todo.findAll()
     console.log(todos.every(task => task instanceof Todo)); 
     console.log("All tasks:", JSON.stringify(todos, null, 2));
@@ -77,7 +61,7 @@ syncDB();
     console.log(todos)
   })
 
-  app.get('/remove-all', async (req, res) => {
+  app.get('/remove-all/', async (req, res) => {
     const todos = await Todo.findAll()
     for (let index = 0; index < todos.length; index++) {
     const element = todos[index];
