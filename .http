@@ -1,1 +1,13 @@
-GET http://localhost:3030/task/1
+POST http://localhost:3030/task/1
+
+###
+GET http://localhost:3030/remove/1
+
+###
+GET http://localhost:3030/remove-all
+
+###
+GET http://localhost:3030/get-all
+
+###
+GET http://localhost:3030/update

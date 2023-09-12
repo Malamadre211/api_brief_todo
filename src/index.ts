@@ -47,11 +47,46 @@ async function syncDB() {
 syncDB();
 
 
-  app.get('/task/:valeur', (req, res) => {
+  app.post('/task/:valeur', (req, res) => {
     const todo = req.params.valeur
-    res.send(`${todo}`)
-    console.log('todo')
+    Todo.create({value: `${todo}`, status:true})
+    res.send(todo)
+    console.log('create')
   })
+
+  app.get('/remove/:valeur', (req, res) => {
+    const todo = req.params.valeur
+    Todo.destroy({where: {value : todo}})
+    res.send(`${todo}`)
+    console.log('remove')
+  })  
+
+  app.get('/remove-all', async (req, res) => {
+    const todos = await Todo.findAll()
+    for (let index = 0; index < todos.length; index++) {
+      const element = todos[index];
+      await element.destroy()
+    }
+    res.send('ok')
+    console.log('remove all')
+  })
+
+  app.get('/get-all', async (req, res) => {
+    const todos = await Todo.findAll()
+    console.log(todos.every(task => task instanceof Todo)); 
+    console.log("All tasks:", JSON.stringify(todos, null, 2));
+    res.send(todos)
+    console.log(todos)
+  })
+
+  app.get('/update', async (req, res) => {
+    const todos = await Todo.create ({value : "tache 1", status: true});
+      await todos.update({value : "update", status: false});
+      await todos.save();
+      res.send(todos)
+      console.log("update")
+    })
+
 
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
